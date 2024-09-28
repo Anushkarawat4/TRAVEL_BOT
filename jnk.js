@@ -5,7 +5,7 @@ let userState = {
   budget: null,
 };
 
-function handleJammuKashmirResponse(userMessage) {
+export function handleJammuKashmirResponse(userMessage) {
   const cityList = ['srinagar', 'gulmarg', 'pahalgam'];
   
   // Step 1: If no city is selected yet, prompt the user to select one
