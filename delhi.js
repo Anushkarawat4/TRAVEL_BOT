@@ -5,7 +5,7 @@ let userState = {
     budget: null,
 };
 
-function handleDelhiResponse(userMessage) {
+export function handleDelhiResponse(userMessage) {
     const cityList = ['red fort', 'qutub minar', 'rashtrapati bhavan'];
 
     // Step 1: If no city is selected yet, prompt the user to select one
