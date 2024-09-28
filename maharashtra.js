@@ -5,7 +5,7 @@ let userState = {
   budget: null,
 };
 
-function handleMaharashtraResponse(userMessage) {
+export function handleMaharashtraResponse(userMessage) {
   const cityList = ['mumbai', 'lonavala', 'matheran'];
   
   // Step 1: If no city is selected yet, prompt the user to select one
