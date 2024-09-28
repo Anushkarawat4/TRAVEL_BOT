@@ -5,7 +5,7 @@ let userState = {
   budget: null,
 };
 
-function handleGujaratResponse(userMessage) {
+export function handleGujaratResponse(userMessage) {
   const cityList = ['kutch', 'saputara', 'gir somnath'];
   
   // Step 1: If no city is selected yet, prompt the user to select one
