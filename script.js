@@ -1,6 +1,5 @@
 import { handleDelhiResponse } from './delhi.js'; // Import function for Delhi
-import { handleMaharashtraResponse, resetUserState } from './maharashtra.js';
- // Import function for Maharashtra
+import { handleMaharashtraResponse } from './maharashtra.js'; // Import function for Maharashtra
 
 document.addEventListener("DOMContentLoaded", () => {
     const chat = document.getElementById('chat');
@@ -12,10 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let conversation = [
         { bot: "Hi! I'm your travel assistant. How can I help you today?" },
-        { bot: "Please enter your destination to get started. Here are the states you can choose from:\n" +
-                "- Delhi\n" +
-                "- Maharashtra" // Add more states here
-        }
+        { bot: "Please select your destination state from the dropdown below." }
     ];
 
     let currentState = null;
@@ -39,6 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Initial rendering of the conversation
     renderConversation();
+    stateSelection.style.display = 'block'; // Show state selection dropdown
 
     sendBtn.addEventListener('click', () => {
         sendMessage();
@@ -47,6 +44,20 @@ document.addEventListener("DOMContentLoaded", () => {
     userInput.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') {
             sendMessage();
+        }
+    });
+
+    selectStateBtn.addEventListener('click', () => {
+        const selectedState = stateDropdown.value.toLowerCase();
+        if (selectedState) {
+            currentState = selectedState;
+            conversation.push({ bot: `You selected ${selectedState}.Great choice.` });
+            loadStateInformation(selectedState);
+            stateSelection.style.display = 'none';
+            renderConversation();
+        } else {
+            conversation.push({ bot: "Please select a valid state." });
+            renderConversation();
         }
     });
 
@@ -60,25 +71,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    selectStateBtn.addEventListener('click', () => {
-        const selectedState = stateDropdown.value.toLowerCase();
-        if (selectedState) {
-            currentState = selectedState;
-            conversation.push({ bot: `You selected ${selectedState}. Let me provide you with information about it.` });
-            loadStateInformation(selectedState);
-            stateSelection.style.display = 'none';
-            renderConversation();
-        } else {
-            conversation.push({ bot: "Please select a valid state." });
-            renderConversation();
-        }
-    });
-
     function handleBotResponse(userMessage) {
-        if (userMessage.toLowerCase().includes('states of india')) {
-            stateSelection.style.display = 'block';
-            conversation.push({ bot: "Please select a state from the dropdown." });
-        } else if (currentState) {
+        if (currentState) {
             if (currentState === 'delhi') {
                 const delhiResponse = handleDelhiResponse(userMessage);
                 conversation.push({ bot: delhiResponse || "I'm sorry, I didn't understand that." });
@@ -95,11 +89,11 @@ document.addEventListener("DOMContentLoaded", () => {
     function loadStateInformation(state) {
         switch (state) {
             case 'delhi':
-                conversation.push({ bot: "You selected Delhi. What would you like to know?" });
+                conversation.push({ bot: "Which city in delhi would you like to travel?" });
                 break;
 
             case 'maharashtra':
-                conversation.push({ bot: "You selected Maharashtra. What would you like to know?" });
+                conversation.push({ bot: "Which city in maharashtra would you like to travel?" });
                 break;
 
             default:
@@ -109,5 +103,4 @@ document.addEventListener("DOMContentLoaded", () => {
         renderConversation();
     }
 });
-
   
