@@ -1,6 +1,6 @@
-// script.js
 import { handleDelhiResponse } from './delhi.js'; // Import function for Delhi
-import { handleMaharashtraResponse } from './maharashtra.js'; // Import function for Maharashtra
+import { handleMaharashtraResponse, resetUserState } from './maharashtra.js';
+ // Import function for Maharashtra
 
 document.addEventListener("DOMContentLoaded", () => {
     const chat = document.getElementById('chat');
@@ -37,9 +37,20 @@ document.addEventListener("DOMContentLoaded", () => {
         chat.scrollTop = chat.scrollHeight;
     }
 
+    // Initial rendering of the conversation
     renderConversation();
 
     sendBtn.addEventListener('click', () => {
+        sendMessage();
+    });
+
+    userInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            sendMessage();
+        }
+    });
+
+    function sendMessage() {
         const userMessage = userInput.value;
         if (userMessage.trim() !== '') {
             conversation.push({ user: userMessage });
@@ -47,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
             userInput.value = '';
             renderConversation();
         }
-    });
+    }
 
     selectStateBtn.addEventListener('click', () => {
         const selectedState = stateDropdown.value.toLowerCase();
@@ -85,19 +96,17 @@ document.addEventListener("DOMContentLoaded", () => {
         switch (state) {
             case 'delhi':
                 conversation.push({ bot: "You selected Delhi. What would you like to know?" });
-                renderConversation();
                 break;
 
             case 'maharashtra':
                 conversation.push({ bot: "You selected Maharashtra. What would you like to know?" });
-                renderConversation();
                 break;
 
             default:
                 conversation.push({ bot: "Information for this state is not available." });
-                renderConversation();
                 break;
         }
+        renderConversation();
     }
 });
 
