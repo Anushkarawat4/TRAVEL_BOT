@@ -1,68 +1,83 @@
+let userState = {
+    city: null,
+    dates: null,
+    timings: null,
+    budget: null,
+};
+
 function handleDelhiResponse(userMessage) {
-    if (userMessage.toLowerCase().includes('delhi')) {
-        // General introduction about Delhi with interactive options
-        let response = `
-        Delhi is a vibrant city, known for its rich history, culture, and diverse experiences! 
-        Would you like information on any of the following?
-        1. Tourist attractions
-        2. Dining and cuisine
-        3. Transportation tips
-        4. Hotel recommendations`;
-        return response;
+    const cityList = ['red fort', 'qutub minar', 'rashtrapati bhavan'];
+
+    // Step 1: If no city is selected yet, prompt the user to select one
+    if (!userState.city) {
+        if (userMessage.toLowerCase().includes('delhi')) {
+            return "Delhi offers rich history and vibrant culture. Please specify the landmark you'd like to explore (e.g., Red Fort, Qutub Minar, Rashtrapati Bhavan).";
+        }
+        const city = cityList.find(city => userMessage.toLowerCase().includes(city));
+        if (city) {
+            userState.city = city;
+            return `Great choice! You've selected ${city}. Could you please provide the dates for your trip?`;
+        }
     }
 
-    // Tourist attractions in Delhi
-    if (userMessage.toLowerCase().includes('attractions')) {
-        let response = `
-        Here are some must-visit attractions in Delhi:
-        - **Red Fort**: A UNESCO World Heritage site, showcasing Mughal architecture.
-        - **India Gate**: A war memorial and popular public spot.
-        - **Qutub Minar**: A historic tower and the tallest brick minaret in the world.
-        - **Humayun's Tomb**: A stunning example of Mughal architecture.
-        - **Lotus Temple**: Known for its beautiful flower-like structure and peaceful ambiance.
-
-        Would you like to know more about any of these attractions?`;
-        return response;
+    // Step 2: After the city, ask for the dates
+    if (userState.city && !userState.dates) {
+        userState.dates = userMessage;
+        return `Got it! You've selected ${userState.city} from ${userState.dates}. Could you also provide preferred timings for travel (morning, afternoon, or evening)?`;
     }
 
-    // Dining and cuisine options in Delhi
-    if (userMessage.toLowerCase().includes('dining') || userMessage.toLowerCase().includes('cuisine')) {
-        let response = `
-        Delhi is famous for its diverse and delicious cuisine. You can try:
-        - **Chandni Chowk**: For the best street food like chaat, parathas, and jalebis.
-        - **Karim’s**: A legendary spot for Mughlai food near Jama Masjid.
-        - **Hauz Khas Village**: A trendy area with modern cafes and fine dining options.
-        - **Connaught Place**: Offers a variety of restaurants, from Indian to international cuisine.
-
-        Would you like restaurant recommendations or street food tours?`;
-        return response;
+    // Step 3: After the dates, ask for the timings
+    if (userState.city && userState.dates && !userState.timings) {
+        userState.timings = userMessage;
+        return `Perfect! What is your budget for this trip?`;
     }
 
-    // Transportation tips in Delhi
-    if (userMessage.toLowerCase().includes('transportation') || userMessage.toLowerCase().includes('travel')) {
-        let response = `
-        Getting around Delhi is easy with various options:
-        - **Delhi Metro**: Fast and affordable, covers most of the city.
-        - **Auto-rickshaws**: A common and inexpensive way to travel short distances.
-        - **Ola/Uber**: Convenient ride-hailing apps for safe and comfortable rides.
-        - **Cycle Rickshaws**: For short trips in Old Delhi, offering a traditional experience.
-
-        Would you like tips on using public transport or booking a cab?`;
-        return response;
+    // Step 4: After getting the budget, perform detailed trip planning
+    if (userState.city && userState.dates && userState.timings && !userState.budget) {
+        userState.budget = parseInt(userMessage.replace(/[^0-9]/g, ''));  // Extract numbers from budget input
+        return detailedTripPlan(userState.city, userState.dates, userState.timings, userState.budget);
     }
 
-    // Hotel recommendations in Delhi
-    if (userMessage.toLowerCase().includes('hotel')) {
-        let response = `
-        Here are some great hotel options in Delhi, ranging from luxury to budget:
-        - **The Oberoi, New Delhi**: A luxurious 5-star hotel offering world-class amenities.
-        - **Taj Palace**: A heritage hotel known for its opulence and excellent service.
-        - **The Lalit**: A popular 5-star hotel located in Connaught Place.
-        - **Zostel Delhi**: A budget-friendly and social hostel for backpackers.
+    return "Please provide more details to plan your trip.";
+}
 
-        Would you like me to assist you with booking or more budget options?`;
-        return response;
+function detailedTripPlan(city, dates, timings, budget) {
+    // Basic weather forecast simulation (could be more advanced if integrated with a real API)
+    const weatherForecast = {
+        'red fort': 'hot and humid, around 35°C during the day and 25°C at night',
+        'qutub minar': 'warm and pleasant, around 32°C during the day and 24°C at night',
+        'rashtrapati bhavan': 'mostly sunny, around 33°C during the day and 23°C at night'
+    };
+
+    // Suggest itinerary based on budget
+    let itinerary = '';
+    if (budget < 5000) {
+        itinerary = `With a limited budget of ₹${budget}, I recommend staying in budget hotels or hostels. You can explore local street food and use public transport for getting around. Focus on visiting the landmark and nearby attractions that are free or low-cost.`;
+    } else if (budget >= 5000 && budget <= 15000) {
+        itinerary = `With a budget of ₹${budget}, you can afford mid-range accommodations and dine at popular restaurants. Consider guided tours of the landmark and nearby historical sites, or exploring cultural events.`;
+    } else {
+        itinerary = `With a budget of ₹${budget}, you can stay in luxury hotels, hire private transport, and indulge in premium experiences. Explore exclusive dining options, private guided tours, and special experiences around the landmark.`;
     }
 
-    return null; // Return null if no response is needed for this location
+    // Detailed trip plan response
+    return `
+      Here's your detailed trip plan for ${city}:
+
+      - **Dates**: ${dates}
+      - **Travel Timings**: ${timings}
+      - **Weather**: Expect ${weatherForecast[city]} during your stay.
+      - **Accommodation and Activities**: ${itinerary}
+
+      Would you like to know more about specific accommodations or travel arrangements?
+    `;
+}
+
+// Reset the user state after trip is planned (for demonstration purposes)
+function resetUserState() {
+    userState = {
+        city: null,
+        dates: null,
+        timings: null,
+        budget: null,
+    };
 }
