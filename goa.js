@@ -5,7 +5,7 @@ let userState = {
     budget: null,
   };
   
-  function handleGoaResponse(userMessage) {
+ export function handleGoaResponse(userMessage) {
     const cityList = ['north goa', 'south goa', 'panaji'];
     
     // Step 1: If no city is selected yet, prompt the user to select one
