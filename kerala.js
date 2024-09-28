@@ -5,7 +5,7 @@ let userState = {
   budget: null,
 };
 
-function handleKeralaResponse(userMessage) {
+export function handleKeralaResponse(userMessage) {
   const cityList = ['kochi', 'munnar', 'alleppey'];
   
   // Step 1: If no city is selected yet, prompt the user to select one
