@@ -1,70 +1,86 @@
-function handleGoaResponse(userMessage) {
-    if (userMessage.toLowerCase().includes('goa')) {
-        // General introduction about Goa with interactive options
-        let response = `
-        Goa is a beautiful destination known for its stunning beaches, vibrant nightlife, and Portuguese-influenced architecture! 
-        Would you like information on any of the following?
-        1. Tourist attractions
-        2. Dining and cuisine
-        3. Transportation tips
-        4. Hotel recommendations`;
-        return response;
+let userState = {
+    city: null,
+    dates: null,
+    timings: null,
+    budget: null,
+  };
+  
+  function handleGoaResponse(userMessage) {
+    const cityList = ['north goa', 'south goa', 'panaji'];
+    
+    // Step 1: If no city is selected yet, prompt the user to select one
+    if (!userState.city) {
+      if (userMessage.toLowerCase().includes('goa')) {
+        return "Goa offers stunning beaches and vibrant cultural experiences. Please specify the area you'd like to explore (e.g., North Goa, South Goa, Panaji).";
+      }
+      const city = cityList.find(city => userMessage.toLowerCase().includes(city));
+      if (city) {
+        userState.city = city;
+        return `Great choice! You've selected ${city}. Could you please provide the dates for your trip?`;
+      }
     }
-
-    // Tourist attractions in Goa
-    if (userMessage.toLowerCase().includes('attractions')) {
-        let response = `
-        Here are some must-visit attractions in Goa:
-        - **Baga Beach**: Popular for water sports and vibrant nightlife.
-        - **Anjuna Beach**: Known for its hippie vibe and weekly flea market.
-        - **Basilica of Bom Jesus**: A UNESCO World Heritage site, home to the remains of St. Francis Xavier.
-        - **Fort Aguada**: A well-preserved Portuguese fort with scenic views.
-        - **Dudhsagar Falls**: A spectacular four-tiered waterfall on the Goa-Karnataka border.
-
-        Would you like more information about any of these attractions or their timings?`;
-        return response;
+    
+    // Step 2: After the city, ask for the dates
+    if (userState.city && !userState.dates) {
+      userState.dates = userMessage;
+      return `Got it! You've selected ${userState.city} from ${userState.dates}. Could you also provide preferred timings for travel (morning, afternoon, or evening)?`;
     }
-
-    // Dining and cuisine options in Goa
-    if (userMessage.toLowerCase().includes('dining') || userMessage.toLowerCase().includes('cuisine')) {
-        let response = `
-        Goa is famous for its seafood and vibrant food culture. Some great options to try include:
-        - **Vinayak Family Restaurant**: Known for its authentic Goan seafood.
-        - **Fish Thali**: Found at many local shacks and restaurants, a must-try.
-        - **Mum’s Kitchen**: A cozy restaurant offering traditional Goan dishes.
-        - **Tito’s Lane**: Great for beachside cafes and vibrant nightlife, with a variety of food choices.
-        - **Martin’s Corner**: A favorite for locals and tourists alike, offering a wide range of Goan specialties.
-
-        Would you like restaurant recommendations or beach shacks for a laid-back meal?`;
-        return response;
+  
+    // Step 3: After the dates, ask for the timings
+    if (userState.city && userState.dates && !userState.timings) {
+      userState.timings = userMessage;
+      return `Perfect! What is your budget for this trip?`;
     }
-
-    // Transportation tips in Goa
-    if (userMessage.toLowerCase().includes('transportation') || userMessage.toLowerCase().includes('travel')) {
-        let response = `
-        Goa is easy to explore with various transportation options:
-        - **Renting a scooter or bike**: The most convenient and affordable way to explore Goa’s beaches and attractions.
-        - **Taxis and rickshaws**: Widely available, but be sure to negotiate the price before starting your journey.
-        - **Goa Miles**: A popular ride-hailing app used by locals and tourists.
-        - **Buses**: Public buses run between the main towns but can be less frequent to beach destinations.
-
-        Would you like tips on renting a scooter or taxi fares in Goa?`;
-        return response;
+  
+    // Step 4: After getting the budget, perform detailed trip planning
+    if (userState.city && userState.dates && userState.timings && !userState.budget) {
+      userState.budget = parseInt(userMessage.replace(/[^0-9]/g, ''));  // Extract numbers from budget input
+      return detailedTripPlan(userState.city, userState.dates, userState.timings, userState.budget);
     }
+  
+    return "Please provide more details to plan your trip.";
+  }
+  
+  function detailedTripPlan(city, dates, timings, budget) {
+    // Basic weather forecast simulation (could be more advanced if integrated with a real API)
+    const weatherForecast = {
+        'north goa': 'sunny with occasional breezes, around 32°C during the day and 25°C at night',
+        'south goa': 'mostly sunny and serene, around 31°C during the day and 24°C at night',
+        'panaji': 'partly cloudy with coastal humidity, around 30°C during the day and 26°C at night'
 
-    // Hotel recommendations in Goa
-    if (userMessage.toLowerCase().includes('hotel')) {
-        let response = `
-        Here are some great hotel options in Goa:
-        - **The Leela Goa**: A luxurious 5-star hotel with stunning beachfront views.
-        - **Taj Exotica**: Known for its impeccable service and scenic property on Benaulim Beach.
-        - **Vivanta Goa**: A stylish and modern hotel located near Miramar Beach.
-        - **Budget options**: You can find affordable beachside stays at places like **Silver Sands Sunshine** or **The Lazy Frog**.
-
-        Would you like help with bookings or recommendations for budget hotels?`;
-        return response;
+    };
+  
+    // Suggest itinerary based on budget
+    let itinerary = '';
+    if (budget < 5000) {
+        itinerary = `With a limited budget of ₹${budget}, I recommend staying in budget hotels, guesthouses, or hostels. You can enjoy local street food and use public transport or rent a scooter for getting around. Focus on exploring beaches and free attractions in North Goa or South Goa.`;
+    } else if (budget >= 5000 && budget <= 15000) {
+        itinerary = `With a budget of ₹${budget}, you can afford mid-range accommodations and dine at popular restaurants. Explore more organized activities such as heritage walks in Panaji, water sports in North Goa, or peaceful retreats in South Goa.`;
+    } else {
+        itinerary = `With a budget of ₹${budget}, you can stay in luxury hotels or resorts, rent private transport, and indulge in premium experiences. You can enjoy guided tours, adventure sports in North Goa, private beach access in South Goa, or luxury cruises from Panaji.`;
     }
-
-    return null; // Return null if no response is needed for this location
-}
-
+    
+  
+    // Detailed trip plan response
+    return `
+      Here's your detailed trip plan for ${city}:
+  
+      - **Dates**: ${dates}
+      - **Travel Timings**: ${timings}
+      - **Weather**: Expect ${weatherForecast[city]} during your stay.
+      - **Accommodation and Activities**: ${itinerary}
+      
+      Would you like to know more about specific accommodations or travel arrangements?
+    `;
+  }
+  
+  // Reset the user state after trip is planned (for demonstration purposes)
+  function resetUserState() {
+    userState = {
+      city: null,
+      dates: null,
+      timings: null,
+      budget: null,
+    };
+  }
+  
