@@ -5,7 +5,7 @@ let userState = {
   budget: null,
 };
 
-function handleSikkimResponse(userMessage) {
+export function handleSikkimResponse(userMessage) {
   const cityList = ['gangtok', 'pelling', 'namchi'];
   
   // Step 1: If no city is selected yet, prompt the user to select one
