@@ -5,7 +5,7 @@ let userState = {
   budget: null,
 };
 
-function handleRajasthanResponse(userMessage) {
+export function handleRajasthanResponse(userMessage) {
   const cityList = ['jaipur', 'udaipur', 'mount abu'];
   
   // Step 1: If no city is selected yet, prompt the user to select one
