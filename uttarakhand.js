@@ -5,7 +5,7 @@ let userState = {
   budget: null,
 };
 
-function handleUttarakhandResponse(userMessage) {
+export function handleUttarakhandResponse(userMessage) {
   const cityList = ['dehradun', 'nainital', 'mussoorie'];
   
   // Step 1: If no city is selected yet, prompt the user to select one
