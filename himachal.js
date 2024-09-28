@@ -5,7 +5,7 @@ let userState = {
   budget: null,
 };
 
-function handleHimachalResponse(userMessage) {
+export function handleHimachalResponse(userMessage) {
   const cityList = ['shimla', 'manali', 'dalhousie'];
   
   // Step 1: If no city is selected yet, prompt the user to select one
