@@ -1,5 +1,13 @@
 import { handleDelhiResponse } from './delhi.js'; // Import function for Delhi
 import { handleMaharashtraResponse } from './maharashtra.js'; // Import function for Maharashtra
+import { handleGoaResponse} from './goa.js';
+import { handleGujaratResponse } from './gujarat.js';
+import { handleHimachalResponse } from './himachal.js';
+import { handleJammuKashmirResponse } from './jnk.js';
+import { handleKeralaResponse } from './kerala.js';
+import { handleRajasthanResponse } from './rajasthan.js';
+import { handleSikkimResponse } from './sikkim.js';
+import { handleUttarakhandResponse } from './uttarakhand.js';
 
 document.addEventListener("DOMContentLoaded", () => {
     const chat = document.getElementById('chat');
